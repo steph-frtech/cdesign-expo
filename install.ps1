@@ -58,22 +58,24 @@ if (-not (Test-Path $skillDst)) {
     Write-Host "Installed skill: expo-from-claude-design" -ForegroundColor Green
 }
 
-# Copy commands
-$commandsSrc = Join-Path $scriptDir "commands"
-Get-ChildItem -Path $commandsSrc -Filter "*.md" | ForEach-Object {
-    $dst = Join-Path $commandsDir $_.Name
-    Copy-Item -Force -Path $_.FullName -Destination $dst
-    $name = [System.IO.Path]::GetFileNameWithoutExtension($_.Name)
-    Write-Host "Installed command: /$name" -ForegroundColor Green
+# Copy commands (explicit list — don't glob, to skip scaffold placeholders)
+$pluginCommands = @("design-to-expo", "expo-screen", "expo-component")
+foreach ($name in $pluginCommands) {
+    $src = Join-Path $scriptDir "commands\$name.md"
+    if (Test-Path $src) {
+        Copy-Item -Force -Path $src -Destination (Join-Path $commandsDir "$name.md")
+        Write-Host "Installed command: /$name" -ForegroundColor Green
+    }
 }
 
-# Copy agents
-$agentsSrc = Join-Path $scriptDir "agents"
-Get-ChildItem -Path $agentsSrc -Filter "*.md" | ForEach-Object {
-    $dst = Join-Path $agentsDir $_.Name
-    Copy-Item -Force -Path $_.FullName -Destination $dst
-    $name = [System.IO.Path]::GetFileNameWithoutExtension($_.Name)
-    Write-Host "Installed agent: $name" -ForegroundColor Green
+# Copy agents (explicit list)
+$pluginAgents = @("expo-converter", "expo-reviewer")
+foreach ($name in $pluginAgents) {
+    $src = Join-Path $scriptDir "agents\$name.md"
+    if (Test-Path $src) {
+        Copy-Item -Force -Path $src -Destination (Join-Path $agentsDir "$name.md")
+        Write-Host "Installed agent: $name" -ForegroundColor Green
+    }
 }
 
 # Final report

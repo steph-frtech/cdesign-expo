@@ -50,20 +50,22 @@ if [ ! -d "$SKILL_DST" ]; then
   echo "Installed skill: expo-from-claude-design"
 fi
 
-# Install commands
-for cmd in "$SCRIPT_DIR/commands/"*.md; do
-  if [ -f "$cmd" ]; then
-    cp -f "$cmd" "$COMMANDS_DIR/"
-    name=$(basename "$cmd" .md)
+# Install commands (explicit list — don't glob, to skip scaffold placeholders)
+PLUGIN_COMMANDS=(design-to-expo expo-screen expo-component)
+for name in "${PLUGIN_COMMANDS[@]}"; do
+  src="$SCRIPT_DIR/commands/$name.md"
+  if [ -f "$src" ]; then
+    cp -f "$src" "$COMMANDS_DIR/"
     echo "Installed command: /$name"
   fi
 done
 
-# Install agents
-for agent in "$SCRIPT_DIR/agents/"*.md; do
-  if [ -f "$agent" ]; then
-    cp -f "$agent" "$AGENTS_DIR/"
-    name=$(basename "$agent" .md)
+# Install agents (explicit list)
+PLUGIN_AGENTS=(expo-converter expo-reviewer)
+for name in "${PLUGIN_AGENTS[@]}"; do
+  src="$SCRIPT_DIR/agents/$name.md"
+  if [ -f "$src" ]; then
+    cp -f "$src" "$AGENTS_DIR/"
     echo "Installed agent: $name"
   fi
 done
