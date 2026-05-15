@@ -8,7 +8,8 @@
     "typescript": "^6.0.3"
   },
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "echo \"no tests defined yet\" && exit 0"
   },
   "name": "cdesign-expo",
   "version": "1.0.0",
